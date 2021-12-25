@@ -1,4 +1,5 @@
 import PatchChain from "./patchChain";
+import removePatch from "./removePatch";
 
 let patchIds = new Set();
 const generatePatchId = () => {
@@ -9,28 +10,23 @@ const generatePatchId = () => {
     return x;
 };
 
-const remove = (obj, funcName, patchId, patcherId) => {
-    throw new Error("Not implemented yet");
-};
-
 export default class Patcher {
     // why not allow the patcher to be called something other than simian?
-    _embeddedName;
-    _id; // unique per name
-    _patchIds; // stores all patch IDs
+    #embeddedName;
+    #id; // unique per name
+    #patchIds; // stores all patch IDs
 
     constructor(embeddedName, id) {
-        this._embeddedName = embeddedName;
-        this._id = id;
-        this._patchIds = new Set();
+        this.#embeddedName = embeddedName;
+        this.#id = id;
+        this.#patchIds = new Set();
     }
 
     get patcherId() {
-        return this._embeddedName.toUpperCase() + "_" + this._id;
+        return this.#embeddedName.toUpperCase() + "_" + this.#id;
     }
 
     after(funcName, obj, patch) {
-        debugger;
         let orig = obj[funcName];
         if (orig === undefined || typeof orig !== "function")
             throw new Error(`${funcName} is not a function on ${obj}`);
@@ -49,13 +45,13 @@ export default class Patcher {
 
         let patchChain = obj[`_##_${this.patcherId}`][funcName];
         if (patchChain === undefined)
-            patchChain = new PatchChain(id, orig, afterFunc, true);
+            patchChain = new PatchChain(id, orig, afterFunc);
         else patchChain = new PatchChain(id, patchChain, afterFunc);
 
         obj[`_##_${this.patcherId}`][funcName] = patchChain;
 
-        obj[funcName] = patchChain.func;
+        obj[funcName] = patchChain.data.func;
 
-        return () => remove(obj, funcName, id, this.patcherId);
+        return () => removePatch(obj, funcName, id, this.patcherId);
     }
 }
