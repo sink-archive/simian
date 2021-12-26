@@ -3,8 +3,10 @@ import removePatch from "./removePatch";
 
 let patchIds = new Set();
 const generatePatchId = () => {
-    let x = 0;
-    while (patchIds.has(x)) x = Math.floor(Math.random() * 100000);
+    let x;
+    while (!x || patchIds.has(x)) {
+        x = Math.floor(Math.random() * 1e10);
+    }
 
     patchIds.add(x);
     return x;
@@ -14,12 +16,13 @@ export default class Patcher {
     // why not allow the patcher to be called something other than simian?
     #embeddedName;
     #id; // unique per name
-    #patchIds; // stores all patch IDs
+
+    #patches; // to cleanup all patches with
 
     constructor(embeddedName, id) {
         this.#embeddedName = embeddedName;
         this.#id = id;
-        this.#patchIds = new Set();
+        this.#patches = new Set();
     }
 
     get patcherId() {
