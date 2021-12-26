@@ -2,6 +2,12 @@
 	"name": "simian",
 	"version": "1.0.0",
 	"description": "Flexible JS monkey-patching simple enough for monkey brains!",
+	"author": "Yellowsink <yellowsink@protonmail.com> (https://yellowsink.vercel.app/)",
+	"repository": "github:yellowsink/simian",
+	"license": "BSD-3-Clause",
+	"source": "src/index.js",
+	"main": "dist/cjs.js",
+	"module": "dist/esm.js",
 	"devDependencies": {
 		"esbuild": "^0.14.8"
 	},

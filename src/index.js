@@ -12,5 +12,3 @@ export default function initPatcher(embeddedName = "simian") {
     patchers.set(embeddedName, (patchers.get(embeddedName) ?? []).concat(id));
     return new Patcher(embeddedName, id);
 }
-
-window.initPatcher = initPatcher;
