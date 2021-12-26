@@ -3,8 +3,8 @@
     "compilerOptions": {
         "target": "ES6",
         "noImplicitAny": true,
-        "emitDeclarationOnly": true,
         "declaration": true,
-        "outFile": "dist/index.d.ts"
+        "outDir": "dist",
+        "module": "ES6"
     }
 }
