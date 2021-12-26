@@ -1,8 +1,11 @@
 {
+	"name": "simian",
+	"version": "1.0.0",
+	"description": "Flexible JS monkey-patching simple enough for monkey brains!",
 	"devDependencies": {
 		"esbuild": "^0.14.8"
 	},
 	"scripts": {
-		"build": "esbuild --bundle src/index.js --outfile=build.js"
+		"build": "node build.mjs"
 	}
 }
