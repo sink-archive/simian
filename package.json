@@ -1,17 +1,19 @@
 {
 	"name": "simian",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Flexible JS monkey-patching simple enough for monkey brains!",
 	"author": "Yellowsink <yellowsink@protonmail.com> (https://yellowsink.vercel.app/)",
 	"repository": "github:yellowsink/simian",
 	"license": "BSD-3-Clause",
-	"source": "src/index.js",
-	"main": "dist/cjs.js",
-	"module": "dist/esm.js",
+	"source": "src/index.ts",
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.esm.js",
+	"types": "dist/index.d.ts",
 	"devDependencies": {
-		"esbuild": "^0.14.8"
+		"esbuild": "^0.14.8",
+		"typescript": "^4.5.4"
 	},
 	"scripts": {
-		"build": "node build.mjs"
+		"build": "tsc && node build.mjs"
 	}
 }

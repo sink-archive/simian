@@ -2,9 +2,11 @@ import getOriginal from "./getOriginal";
 import PatchChain from "./patchChain";
 import removePatch from "./removePatch";
 
-let patchIds = new Set();
+type PatchType = "AFTER" | "BEFORE" | "INSTEAD";
+
+let patchIds = new Set<number>();
 const generatePatchId = () => {
-    let x;
+    let x: number;
     while (!x || patchIds.has(x)) {
         x = Math.floor(Math.random() * 1e10);
     }
@@ -20,18 +22,18 @@ export default class Patcher {
 
     #patched; // to cleanup all patches with
 
-    constructor(embeddedName, id) {
+    constructor(embeddedName: string, id: number) {
         this.#embeddedName = embeddedName;
         this.#id = id;
-        this.#patched = new Set();
+        this.#patched = new Set<any>();
     }
 
     get patcherId() {
         return this.#embeddedName.toUpperCase() + "_" + this.#id;
     }
 
-    #patch(t, funcName, obj, patch) {
-        const orig = obj[funcName];
+    #patch(t: PatchType, funcName: string, obj: any, patch: Function) {
+        const orig: Function = obj[funcName];
         if (orig === undefined || typeof orig !== "function")
             throw new Error(`${funcName} is not a function on ${obj}`);
 
@@ -42,7 +44,7 @@ export default class Patcher {
             obj[`_$$_${this.patcherId}`] = {};
 
         // create patch func
-        let patchFunction;
+        let patchFunction: (func: Function, args: any[]) => any;
         switch (t) {
             case "AFTER":
                 patchFunction = (func, args) => {
@@ -66,7 +68,7 @@ export default class Patcher {
         }
 
         // add to patch chain
-        let patchChain = obj[`_$$_${this.patcherId}`][funcName];
+        let patchChain: PatchChain = obj[`_$$_${this.patcherId}`][funcName];
         if (patchChain === undefined)
             patchChain = new PatchChain(id, orig, patchFunction);
         else patchChain = new PatchChain(id, patchChain, patchFunction);
@@ -81,15 +83,15 @@ export default class Patcher {
         return () => removePatch(obj, funcName, id, this.patcherId);
     }
 
-    after(funcName, obj, patch) {
+    after(funcName: string, obj: unknown, patch: (func: Function, args: any[]) => any) {
         return this.#patch("AFTER", funcName, obj, patch);
     }
 
-    before(funcName, obj, patch) {
+    before(funcName: string, obj: unknown, patch: (args: any[]) => any) {
         return this.#patch("BEFORE", funcName, obj, patch);
     }
 
-    instead(funcName, obj, patch) {
+    instead(funcName: string, obj: unknown, patch: (args: any[], func: Function) => any) {
         return this.#patch("INSTEAD", funcName, obj, patch);
     }
 

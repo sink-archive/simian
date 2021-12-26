@@ -1,7 +1,8 @@
+import PatchChain from "./patchChain";
+
 // this is honestly probably the worst function in this lib, but removing from a (non doubly) linked list be like
-export default (obj, funcName, patchId, patcherId) => {
-    debugger;
-    const patchChain = obj[`_$$_${patcherId}`][funcName];
+export default (obj: any, funcName: string, patchId: number, patcherId: string) => {
+    const patchChain: PatchChain = obj[`_$$_${patcherId}`][funcName];
 
     // most recent patch - first in the chain
     if (patchChain.data.id === patchId) {
@@ -23,14 +24,17 @@ export default (obj, funcName, patchId, patcherId) => {
     // singly linked list node remove, how fun
     // https://www.tutorialspoint.com/remove-elements-from-singly-linked-list-in-javascript
     // dont ask me how this works or what the hell recursiveTransform does, idk
-    const recursiveTransform = (list) => {
+    const recursiveTransform = (list: PatchChain): boolean => {
         if (list && typeof list.prev === "object") {
             list.data = list.prev.data;
             list.prev = list.prev.prev;
+            // @ts-expect-error wtf????
             return recursiveTransform(list.prev);
-        } else return true;
+        }
+        
+        return true;
     };
-    const removeNode = (list) => {
+    const removeNode = (list: PatchChain): boolean => {
         // end reached & no match
         if (!list) throw new Error("could not find unpatch");
 
@@ -39,7 +43,7 @@ export default (obj, funcName, patchId, patcherId) => {
         return recursiveTransform(list);
     };
 
-    let tmpChain = { ...patchChain };
+    let tmpChain: PatchChain = { ...patchChain };
 
     removeNode(tmpChain);
     obj[`_$$_${patcherId}`][funcName] = tmpChain;
