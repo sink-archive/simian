@@ -38,4 +38,10 @@ export default (obj, funcName, patchId, patcherId) => {
             return removeNode(list.prev);
         return recursiveTransform(list);
     };
+
+    let tmpChain = { ...patchChain };
+
+    removeNode(tmpChain);
+    obj[`_$$_${patcherId}`][funcName] = tmpChain;
+    obj[funcName] = tmpChain.data.func;
 };
