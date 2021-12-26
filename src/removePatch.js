@@ -22,19 +22,20 @@ export default (obj, funcName, patchId, patcherId) => {
 
     // singly linked list node remove, how fun
     // https://www.tutorialspoint.com/remove-elements-from-singly-linked-list-in-javascript
-    // dont ask me how this works, magic is how
-    /* const recursiveTransform = (list) => {
+    // dont ask me how this works or what the hell recursiveTransform does, idk
+    const recursiveTransform = (list) => {
         if (list && typeof list.prev === "object") {
             list.data = list.prev.data;
             list.prev = list.prev.prev;
             return recursiveTransform(list.prev);
         } else return true;
-    }; */
+    };
     const removeNode = (list) => {
         // end reached & no match
         if (!list) throw new Error("could not find unpatch");
 
-        if (typeof list.prev === "object") return removeNode(list.prev);
-        //return recursiveTransform(list);
+        if (typeof list.prev === "object" && list.data.id !== patchId)
+            return removeNode(list.prev);
+        return recursiveTransform(list);
     };
 };
