@@ -40,15 +40,15 @@ export default class Patcher {
 
         const id = generatePatchId();
 
-        if (obj[`_##_${this.patcherId}`] === undefined)
-            obj[`_##_${this.patcherId}`] = {};
+        if (obj[`_$$_${this.patcherId}`] === undefined)
+            obj[`_$$_${this.patcherId}`] = {};
 
-        let patchChain = obj[`_##_${this.patcherId}`][funcName];
+        let patchChain = obj[`_$$_${this.patcherId}`][funcName];
         if (patchChain === undefined)
             patchChain = new PatchChain(id, orig, afterFunc);
         else patchChain = new PatchChain(id, patchChain, afterFunc);
 
-        obj[`_##_${this.patcherId}`][funcName] = patchChain;
+        obj[`_$$_${this.patcherId}`][funcName] = patchChain;
 
         obj[funcName] = patchChain.data.func;
 

@@ -1,7 +1,7 @@
 // this is honestly probably the worst function in this lib, but removing from a (non doubly) linked list be like
 export default (obj, funcName, patchId, patcherId) => {
     debugger;
-    const patchChain = obj[`_##_${patcherId}`][funcName];
+    const patchChain = obj[`_$$_${patcherId}`][funcName];
 
     // most recent patch - first in the chain
     if (patchChain.data.id === patchId) {
@@ -14,7 +14,7 @@ export default (obj, funcName, patchId, patcherId) => {
         }
 
         // pop off the top of the patch chain
-        obj[`_##_${patcherId}`][funcName] = patchChain.prev;
+        obj[`_$$_${patcherId}`][funcName] = patchChain.prev;
         // fix func
         obj[funcName] = patchChain.prev.data.func;
         return;
