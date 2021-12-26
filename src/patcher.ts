@@ -83,7 +83,7 @@ export default class Patcher {
         return () => removePatch(obj, funcName, id, this.patcherId);
     }
 
-    after(funcName: string, obj: unknown, patch: (func: Function, args: any[]) => any) {
+    after(funcName: string, obj: unknown, patch: (args: any[], ret: any) => any) {
         return this.#patch("AFTER", funcName, obj, patch);
     }
 
