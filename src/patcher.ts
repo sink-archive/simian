@@ -47,21 +47,24 @@ export default class Patcher {
         let patchFunction: (func: Function, args: any[]) => any;
         switch (t) {
             case "AFTER":
-                patchFunction = (func, args) => {
-                    let ret = func.apply(obj, args);
+                patchFunction = function (func, args) {
+                    let ret = func(...args);
                     ret = patch(args, ret) ?? ret;
                     return ret;
                 };
 
                 break;
             case "BEFORE":
-                patchFunction = (func, args) => {
+                patchFunction = function (func, args) {
+                    debugger;
                     const newArgs = patch(args) ?? args;
-                    return func.apply(obj, newArgs);
+                    return func(...newArgs);
                 };
                 break;
             case "INSTEAD":
-                patchFunction = (func, args) => patch(args, func.bind(obj));
+                patchFunction = function (func, args) {
+                    return patch(args, func);
+                };
                 break;
             default:
                 break;
@@ -78,12 +81,20 @@ export default class Patcher {
         // inject patch!
         obj[funcName] = patchChain.data.func;
 
+        // i read thru Cumcord patcher src to find this one lol
+        // attach original function props to patched function
+        Object.assign(obj[funcName], orig);
+
         this.#patched.add(obj);
 
         return () => removePatch(obj, funcName, id, this.patcherId);
     }
 
-    after(funcName: string, obj: unknown, patch: (args: any[], ret: any) => any) {
+    after(
+        funcName: string,
+        obj: unknown,
+        patch: (args: any[], ret: any) => any
+    ) {
         return this.#patch("AFTER", funcName, obj, patch);
     }
 
@@ -91,7 +102,11 @@ export default class Patcher {
         return this.#patch("BEFORE", funcName, obj, patch);
     }
 
-    instead(funcName: string, obj: unknown, patch: (args: any[], func: Function) => any) {
+    instead(
+        funcName: string,
+        obj: unknown,
+        patch: (args: any[], func: Function) => any
+    ) {
         return this.#patch("INSTEAD", funcName, obj, patch);
     }
 
