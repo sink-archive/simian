@@ -10,7 +10,7 @@ export default (obj: any, funcName: string, patchId: number, patcherId: string) 
             // the only patch left,
             // so set the func back to original & delete the chain
             obj[funcName] = patchChain.prev;
-            obj[`_##_${patcherId}`][funcName] = undefined;
+            obj[`_$$_${patcherId}`][funcName] = undefined;
             return;
         }
 

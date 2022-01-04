@@ -4,11 +4,16 @@
 //  - a `PatchChain` otherwise
 
 export default class PatchChain {
-    constructor(id: number, prev: PatchChain | Function, func: (func: Function, args: any[]) => any) {
+    constructor(
+        id: number,
+        prev: PatchChain | Function,
+        patch: (ctx: unknown, func: Function, args: any[]) => any
+    ) {
         this.data = {
             id,
-            func: (...args: any[]) =>
-                func(
+            func: (ctx: unknown, ...args: any[]) =>
+                patch(
+                    ctx,
                     typeof this.prev === "function"
                         ? this.prev
                         : this.prev.data.func,

@@ -44,27 +44,30 @@ export default class Patcher {
             obj[`_$$_${this.patcherId}`] = {};
 
         // create patch func
-        let patchFunction: (func: Function, args: any[]) => any;
+        let patchFunction: (ctx: unknown, func: Function, args: any[]) => any;
         switch (t) {
             case "AFTER":
-                patchFunction = function (func, args) {
-                    let ret = func(...args);
-                    ret = patch(args, ret) ?? ret;
+                patchFunction = (ctx, func, args) => {
+                    let ret = func.apply(ctx, args);
+                    const newRet = patch.apply(ctx, [args, ret]);
+                    if (typeof newRet !== "undefined") ret = newRet
                     return ret;
                 };
 
                 break;
+
             case "BEFORE":
-                patchFunction = function (func, args) {
-                    debugger;
-                    const newArgs = patch(args) ?? args;
-                    return func(...newArgs);
+                patchFunction = (ctx, func, args) => {
+                    let finalArgs = args;
+                    const newArgs = patch.apply(ctx, [args]) ?? args;
+                    if (Array.isArray(newArgs)) finalArgs = newArgs;
+                    return func.apply(ctx, finalArgs);
                 };
                 break;
+
             case "INSTEAD":
-                patchFunction = function (func, args) {
-                    return patch(args, func);
-                };
+                patchFunction = (ctx, func, args) =>
+                    patch.apply(ctx, [args, func.bind(ctx)]);
                 break;
             default:
                 break;
@@ -79,7 +82,10 @@ export default class Patcher {
         obj[`_$$_${this.patcherId}`][funcName] = patchChain;
 
         // inject patch!
-        obj[funcName] = patchChain.data.func;
+        //obj[funcName] = patchChain.data.func;
+        obj[funcName] = function () {
+            return patchChain.data.func(this, ...arguments);
+        };
 
         // i read thru Cumcord patcher src to find this one lol
         // attach original function props to patched function
