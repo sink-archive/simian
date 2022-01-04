@@ -14,4 +14,4 @@ export default function initPatcher(embeddedName = "simian") {
 }
 
 // @ts-ignore
-window.patcher = initPatcher();
+//window.patcher = initPatcher();
