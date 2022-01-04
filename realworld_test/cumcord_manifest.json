@@ -1,0 +1,7 @@
+{
+  "name": "Simian Real-World Test",
+  "description": "Tests to see if Simian works well enough to stand-in for CC's patcher",
+  "author": "Yellowsink",
+  "file": "index.js",
+  "license": "BSD-3"
+}
