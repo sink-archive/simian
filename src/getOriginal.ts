@@ -6,8 +6,8 @@ const getOriginal = (patchChain: PatchChain): Function => {
     return getOriginal(patchChain.prev);
 };
 
-export default (patcherId: string, obj: any, funcName: string): Function => {
-    const patchChain: PatchChain = obj[`_$$_${patcherId}`][funcName];
+export default (patcherId: symbol, obj: any, funcName: string): Function => {
+    const patchChain: PatchChain = obj[patcherId][funcName];
     if (patchChain === undefined) return obj[funcName];
 
     return getOriginal(patchChain);

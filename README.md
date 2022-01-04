@@ -28,9 +28,9 @@ Originally cause I wanted to try make a patcher without looking at existing patc
 
 ```ts
 // 1: import it
-import initPatcher from "simian";
+import Patcher from "simian";
 // 2: create a patcher
-const patcher = initPatcher();
+const patcher = new Patcher();
 // 3: some functions to patch!
 function wintest(a) { return a * a }
 const obj = { objtest: (a, b) => a / b };
@@ -56,7 +56,7 @@ wintest(5); // 25
 `after` patches attach on the end of functions, and allow you to modify the return value of the function (or not! - simply don't return anything!). The original function is first called as usual, then your code is passed the args as an array, and the return value, which you can modify.
 
 ```ts
-patcher.after: (funcName: string, obj: unknown, patch: (args: any[], ret: any) => any) => () => void
+patcher.after: (funcName: string, obj: unknown, patch: (args: unknown[], ret: unknown) => unknown) => () => void
 ```
 
 ### Types of patches: before
@@ -64,7 +64,7 @@ patcher.after: (funcName: string, obj: unknown, patch: (args: any[], ret: any) =
 `before` patches attach on the front of functions, and allow you to modify the arguments of the function, before sending them on to the original function. Your code is first given the args as an array, and you simply return the args to pass to the original function, again as an array. Then the original function is called as usual with your new args.
 
 ```ts
-patcher.before: (funcName: string, obj: unknown, patch: (args: any[]) => any[]) => () => void
+patcher.before: (funcName: string, obj: unknown, patch: (args: unknown[]) => unknown[]) => () => void
 ```
 
 ### Types of patches: instead
@@ -72,14 +72,17 @@ patcher.before: (funcName: string, obj: unknown, patch: (args: any[]) => any[]) 
 `instead` patches replace the function entirely, taking control over the args, return value, and side effects. However, if you wish to use the original function for anything (including calling it!), you are also passed it, though of course you don't need to take it as an arg - `(args, orig) => {}`, `args => {}` are both valid.
 
 ```ts
-patcher.instead: (funcName: string, obj: unknown, patch: (args: any[], func: Function) => any): () => void
+patcher.instead: (funcName: string, obj: unknown, patch: (args: unknown[], func: Function) => unknown): () => void
 ```
 
-### Note on `initPatcher`
+### Note
 
-You can also pass a string to `initPatcher` to modify the name of the patcher's data stores (some of them are attached to the parent of the function being patched!). This is **<u>NOT</u>** necessary for using multiple patchers at once, they all have unique IDs.
+You can also pass a string to `new Patcher()` to modify the label of the patcher's data store `symbol`s.
+This is **<u>NOT</u>** necessary for using multiple patchers at once, as every call of `Symbol()` returns a globally unique value.
 
-So for example with `initPatcher()`, the side effect stores may be `obj._$$_SIMIAN_123456`, but with `initPatcher("myCoolLib")`, the side effect stores may be `obj._$$_MYCOOLLIB_123456`.
+This is not really useful directly, but recomended:
+it does mean that if others are going to see Simian stores while debugging theirs via devtools,
+its going to be obvious that they came from your software.
 
 ## Type delcarations?
 
@@ -91,4 +94,4 @@ No flow types unless I get bored at some point, but probably just use flowgen.
 
 Cause monkey patching, and monkeys are simians, and, uh, yeah I'm not good at names... 😅
 
-And as for monkey patching itself, according to wikipedia, it comes from the earlier term *"guerrilla patch"*, as in stealth, and which sounds like *"gorilla"*.
+And as for monkey patching itself, according to wikipedia, it comes from the earlier term _"guerrilla patch"_, as in stealth, and which sounds like _"gorilla"_.

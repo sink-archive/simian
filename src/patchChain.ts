@@ -5,13 +5,13 @@
 
 export default class PatchChain {
     constructor(
-        id: number,
+        id: symbol,
         prev: PatchChain | Function,
         patch: (ctx: unknown, func: Function, args: any[]) => any
     ) {
         this.data = {
             id,
-            func: (ctx: unknown, ...args: any[]) =>
+            func: (ctx: unknown, ...args: unknown[]) =>
                 patch(
                     ctx,
                     typeof this.prev === "function"

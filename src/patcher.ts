@@ -4,32 +4,14 @@ import removePatch from "./removePatch";
 
 type PatchType = "AFTER" | "BEFORE" | "INSTEAD";
 
-let patchIds = new Set<number>();
-const generatePatchId = () => {
-    let x: number;
-    while (!x || patchIds.has(x)) {
-        x = Math.floor(Math.random() * 1e10);
-    }
-
-    patchIds.add(x);
-    return x;
-};
-
 export default class Patcher {
-    // why not allow the patcher to be called something other than simian?
-    #embeddedName;
-    #id; // unique per name
+    #id; // unique globally among every single object in the JS runtime
 
     #patched; // to cleanup all patches with
 
-    constructor(embeddedName: string, id: number) {
-        this.#embeddedName = embeddedName;
-        this.#id = id;
+    constructor(embeddedName = "simian") {
+        this.#id = Symbol(embeddedName);
         this.#patched = new Set<any>();
-    }
-
-    get patcherId() {
-        return this.#embeddedName.toUpperCase() + "_" + this.#id;
     }
 
     #patch(t: PatchType, funcName: string, obj: any, patch: Function) {
@@ -38,19 +20,18 @@ export default class Patcher {
             throw new Error(`${funcName} is not a function on ${obj}`);
 
         // prepare to patch
-        const id = generatePatchId();
+        const id = Symbol();
 
-        if (obj[`_$$_${this.patcherId}`] === undefined)
-            obj[`_$$_${this.patcherId}`] = {};
+        if (obj[this.#id] === undefined) obj[this.#id] = {};
 
         // create patch func
-        let patchFunction: (ctx: unknown, func: Function, args: any[]) => any;
+        let patchFunction: (ctx: unknown, func: Function, args: unknown[]) => unknown;
         switch (t) {
             case "AFTER":
                 patchFunction = (ctx, func, args) => {
                     let ret = func.apply(ctx, args);
                     const newRet = patch.apply(ctx, [args, ret]);
-                    if (typeof newRet !== "undefined") ret = newRet
+                    if (typeof newRet !== "undefined") ret = newRet;
                     return ret;
                 };
 
@@ -74,12 +55,12 @@ export default class Patcher {
         }
 
         // add to patch chain
-        let patchChain: PatchChain = obj[`_$$_${this.patcherId}`][funcName];
+        let patchChain: PatchChain = obj[this.#id][funcName];
         if (patchChain === undefined)
             patchChain = new PatchChain(id, orig, patchFunction);
         else patchChain = new PatchChain(id, patchChain, patchFunction);
 
-        obj[`_$$_${this.patcherId}`][funcName] = patchChain;
+        obj[this.#id][funcName] = patchChain;
 
         // inject patch!
         //obj[funcName] = patchChain.data.func;
@@ -93,39 +74,39 @@ export default class Patcher {
 
         this.#patched.add(obj);
 
-        return () => removePatch(obj, funcName, id, this.patcherId);
+        return () => removePatch(obj, funcName, id, this.#id);
     }
 
     after(
         funcName: string,
         obj: unknown,
-        patch: (args: any[], ret: any) => any
+        patch: (args: unknown[], ret: unknown) => unknown
     ) {
         return this.#patch("AFTER", funcName, obj, patch);
     }
 
-    before(funcName: string, obj: unknown, patch: (args: any[]) => any) {
+    before(funcName: string, obj: unknown, patch: (args: unknown[]) => unknown) {
         return this.#patch("BEFORE", funcName, obj, patch);
     }
 
     instead(
         funcName: string,
         obj: unknown,
-        patch: (args: any[], func: Function) => any
+        patch: (args: unknown[], func: Function) => unknown
     ) {
         return this.#patch("INSTEAD", funcName, obj, patch);
     }
 
     cleanupAll() {
         for (const obj of this.#patched) {
-            for (const funcName in obj[`_$$_${this.patcherId}`]) {
-                const orig = getOriginal(this.patcherId, obj, funcName);
+            for (const funcName in obj[this.#id]) {
+                const orig = getOriginal(this.#id, obj, funcName);
                 obj[funcName] = orig;
-                obj[`_$$_${this.patcherId}`][funcName] = undefined;
+                obj[this.#id][funcName] = undefined;
             }
 
-            obj[`_$$_${this.patcherId}`] = undefined;
-            delete obj[`_$$_${this.patcherId}`];
+            obj[this.#id] = undefined;
+            delete obj[this.#id];
         }
         this.#patched.clear();
     }
