@@ -2,13 +2,13 @@
 
 Flexible JS monkey-patching simple enough for monkey brains!
 
-![npm bundle size min](https://img.shields.io/bundlephobia/min/simian)
-![npm bundle size min gzip](https://img.shields.io/bundlephobia/minzip/simian?label=min%20%2B%20gzip%20size)
-![npm dl monthly](https://img.shields.io/npm/dm/simian)
+![npm bundle size min](https://img.shields.io/bundlephobia/min/simian?style=for-the-badge)
+![npm bundle size min gzip](https://img.shields.io/bundlephobia/minzip/simian?label=min%20%2B%20gzip%20size&style=for-the-badge)
+![npm dl monthly](https://img.shields.io/npm/dm/simian?style=for-the-badge)
 
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/yellowsink/simian)
-![GitHub last commit](https://img.shields.io/github/last-commit/yellowsink/simian)
-![NPM licence](https://img.shields.io/npm/l/simian)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/yellowsink/simian?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/yellowsink/simian?style=for-the-badge)
+![NPM licence](https://img.shields.io/npm/l/simian?style=for-the-badge)
 
 ---
 
