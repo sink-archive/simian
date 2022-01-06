@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+-   General code cleanup (thanks functional programming people for partial application <3)
+
 ## 1.4.0
 
 -   Switched to symbols for ID generation

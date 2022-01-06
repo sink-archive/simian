@@ -7,7 +7,7 @@ export default class PatchChain {
     constructor(
         id: symbol,
         prev: PatchChain | Function,
-        patch: (ctx: unknown, func: Function, args: any[]) => any
+        patch: (ctx: unknown, func: Function, args: unknown[]) => unknown
     ) {
         this.data = {
             id,

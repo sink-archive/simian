@@ -1,10 +1,9 @@
 import PatchChain from "./patchChain";
 
-const getOriginal = (patchChain: PatchChain): Function => {
-    if (typeof patchChain.prev === "function") return patchChain.prev;
-
-    return getOriginal(patchChain.prev);
-};
+const getOriginal = (patchChain: PatchChain): Function =>
+    typeof patchChain.prev === "function"
+        ? patchChain.prev
+        : getOriginal(patchChain.prev);
 
 export default (patcherId: symbol, obj: any, funcName: string): Function => {
     const patchChain: PatchChain = obj[patcherId][funcName];

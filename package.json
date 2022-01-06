@@ -1,6 +1,6 @@
 {
 	"name": "simian",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "Flexible JS monkey-patching simple enough for monkey brains!",
 	"author": "Yellowsink <yellowsink@protonmail.com> (https://yellowsink.vercel.app/)",
 	"repository": "github:yellowsink/simian",
