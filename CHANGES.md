@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.5
+
+-	Add licence
+
 ## 1.4.2
 
 -   Keywords.
