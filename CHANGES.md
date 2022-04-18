@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.2
+- Fix npmignore ignoring all but one dist file
+
 ## 1.5.1
 - Update CHANGES.md
 
