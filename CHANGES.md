@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.1
+- Update CHANGES.md
+
+## 1.5.0
+- Refactor patchchain
+- Better CJS support
+
 ## 1.4.5
 
 -	Add licence
