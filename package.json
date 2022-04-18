@@ -1,22 +1,20 @@
 {
     "name": "simian",
-    "version": "1.4.3",
+    "version": "1.5.0",
     "description": "Flexible JS monkey-patching simple enough for monkey brains!",
-    "author": "Yellowsink <yellowsink@protonmail.com> (https://yellowsink.vercel.app/)",
+    "author": "Yellowsink",
     "repository": "github:yellowsink/simian",
     "license": "BSD-3-Clause",
-    "source": "src/index.ts",
-    "main": "dist/index.js",
-    "module": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
     "devDependencies": {
         "esbuild": "^0.14.8",
         "typescript": "^4.5.4"
     },
     "scripts": {
-        "build": "tsc",
-        "bundle": "esbuild src/index.ts --bundle --outfile=dist/bundle.js",
-        "prepublish": "rm -rf dist && tsc"
+        "postinstall": "rm -rf dist",
+        "prepublishOnly": "rm -rf dist && tsc && esbuild src/*.ts --format=cjs --outdir=dist/cjs"
     },
     "keywords": [
         "javascript",
@@ -26,9 +24,9 @@
         "patch",
         "monkey-patcher",
         "monkey-patch",
-		"injector",
-		"injection",
-		"guerrilla-patcher",
-		"guerrilla-injector"
+        "injector",
+        "injection",
+        "guerrilla-patcher",
+        "guerrilla-injector"
     ]
 }
