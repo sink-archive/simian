@@ -1,4 +1,4 @@
-import PatchChain from "./patchChain";
+import PatchChain from "./patchChainNode";
 
 const getOriginal = (patchChain: PatchChain): Function =>
     typeof patchChain.prev === "function"

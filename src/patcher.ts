@@ -1,5 +1,6 @@
 import getOriginal from "./getOriginal";
-import PatchChain from "./patchChain";
+import hijackingFunc from "./hijackingFunc";
+import PatchChainNode from "./patchChainNode";
 import removePatch from "./removePatch";
 
 type PatchType = "AFTER" | "BEFORE" | "INSTEAD";
@@ -71,18 +72,16 @@ export default class Patcher {
             }
 
             // add to patch chain
-            let patchChain: PatchChain = obj[this.#id][funcName];
-            if (patchChain === undefined)
-                patchChain = new PatchChain(id, orig, patchFunction);
-            else patchChain = new PatchChain(id, patchChain, patchFunction);
+            const patchChain = new PatchChainNode(
+                id,
+                obj[this.#id][funcName] ?? orig,
+                patchFunction
+            );
 
             obj[this.#id][funcName] = patchChain;
 
             // inject patch!
-            //obj[funcName] = patchChain.data.func;
-            obj[funcName] = function () {
-                return patchChain.data.func(this, ...arguments);
-            };
+            obj[funcName] = hijackingFunc(patchChain.func);
 
             // i read thru Cumcord patcher src to find this one lol
             // attach original function props to patched function
