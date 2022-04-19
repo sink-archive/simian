@@ -1,23 +1,28 @@
 import { after, before, instead } from "spitroast";
 
-const patchesMap: { [k: symbol]: (() => boolean)[] } = {};
+const patchesMap = new WeakMap<Simian, (() => boolean)[]>();
+
 const addPatch =
-  <T>(id: symbol, patchFunc: (...args: T[]) => () => boolean) =>
+  <T>(self: Simian, patchFunc: (...args: T[]) => () => boolean) =>
   (...args: T[]) => {
     const patch = patchFunc(...args);
-    patchesMap[id].push(patch);
+    patchesMap.get(self).push(patch);
     return patch;
   };
 
-export default class {
-  id = Symbol();
-
-  cleanupAll() {
-    patchesMap[this.id].reverse().forEach((patch) => patch());
-    delete patchesMap[this.id];
+export default class Simian {
+  constructor() {
+    patchesMap.set(this, []);
   }
 
-  after: typeof after = addPatch(this.id, after);
-  before: typeof before = addPatch(this.id, before);
-  instead: typeof instead = addPatch(this.id, instead);
+  cleanupAll() {
+    patchesMap
+      .get(this)
+      .reverse()
+      .forEach((patch) => patch());
+  }
+
+  after: typeof after = addPatch(this, after);
+  before: typeof before = addPatch(this, before);
+  instead: typeof instead = addPatch(this, instead);
 }

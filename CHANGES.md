@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+- Can't I even write a wrapper properly????
+
 ## 2.0.0
 - Deprecate and thin wrap spitroast
 
