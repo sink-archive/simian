@@ -1,32 +1,22 @@
 {
-    "name": "simian",
-    "version": "1.5.2",
-    "description": "Flexible JS monkey-patching simple enough for monkey brains!",
-    "author": "Yellowsink",
-    "repository": "github:yellowsink/simian",
-    "license": "BSD-3-Clause",
-    "main": "dist/cjs/index.js",
-    "module": "dist/esm/index.js",
-    "types": "dist/types/index.d.ts",
-    "devDependencies": {
-        "esbuild": "^0.14.8",
-        "typescript": "^4.5.4"
-    },
-    "scripts": {
-        "postinstall": "rm -rf dist",
-        "prepublishOnly": "rm -rf dist && tsc && esbuild src/*.ts --format=cjs --outdir=dist/cjs"
-    },
-    "keywords": [
-        "javascript",
-        "js",
-        "mod",
-        "patcher",
-        "patch",
-        "monkey-patcher",
-        "monkey-patch",
-        "injector",
-        "injection",
-        "guerrilla-patcher",
-        "guerrilla-injector"
-    ]
+  "name": "simian",
+  "version": "2.0.0",
+  "description": "[DEPRECATED] Flexible JS monkey-patching simple enough for monkey brains!",
+  "author": "Yellowsink",
+  "repository": "github:yellowsink/simian",
+  "license": "Unlicense",
+  "main": "dist/cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "esbuild": "^0.14.8",
+    "spitroast": "^1.3.6",
+    "typescript": "^4.5.4"
+  },
+  "scripts": {
+    "prepublish": "rm -rf dist && tsc && esbuild src/*.ts --outfile=dist/index.js --format=esm && esbuild src/*.ts --outfile=dist/cjs.js --format=cjs"
+  },
+  "peerDependencies": {
+    "spitroast": "^1.3.6"
+  }
 }

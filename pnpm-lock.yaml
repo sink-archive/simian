@@ -2,10 +2,12 @@ lockfileVersion: 5.3
 
 specifiers:
   esbuild: ^0.14.8
+  spitroast: ^1.3.6
   typescript: ^4.5.4
 
 devDependencies:
   esbuild: 0.14.8
+  spitroast: 1.3.6
   typescript: 4.5.4
 
 packages:
@@ -177,6 +179,10 @@ packages:
       esbuild-windows-32: 0.14.8
       esbuild-windows-64: 0.14.8
       esbuild-windows-arm64: 0.14.8
+    dev: true
+
+  /spitroast/1.3.6:
+    resolution: {integrity: sha512-p/bnYPjzqLCJKL3KNzSL2sOC46R01Iy+RAkL2/mOrWkI8bf89z1IywfERpFwEmX35oEE+pyn6rRy2JEClgpOoQ==}
     dev: true
 
   /typescript/4.5.4:

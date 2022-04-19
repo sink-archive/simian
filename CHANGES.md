@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.0
+- Deprecate and thin wrap spitroast
+
 ## 1.5.2
 - Fix npmignore ignoring all but one dist file
 

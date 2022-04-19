@@ -1,5 +1,19 @@
 # Simian
 
+Simian is deprecated in favour of [spitroast](https://npmjs.com/package/spitroast),
+which originated in a Discord client modification,
+and has now been split out into a separate lib.
+
+It is currently the most featureful patcher and is a collaborative effort
+between many contributors, including myself. It is also smaller.
+
+Please use it instead, though `simian@2.0.0` provides a wrapper around it
+if you need multiple patchers with separate `cleanupAll()`s.
+
+---
+# Old README
+
+
 Flexible JS monkey-patching simple enough for monkey brains!
 
 ![npm bundle size min](https://img.shields.io/bundlephobia/min/simian?style=for-the-badge)
